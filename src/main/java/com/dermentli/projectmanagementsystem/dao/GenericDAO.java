@@ -11,6 +11,4 @@ public abstract class GenericDAO {
 
     abstract Connection setConnection(String URL, String username, String password) throws SQLException;
 
-    abstract ResultSet processRequest(String query);
-
 }

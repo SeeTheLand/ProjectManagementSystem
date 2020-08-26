@@ -5,12 +5,14 @@ import com.dermentli.projectmanagementsystem.dao.ProjectDAO;
 import com.dermentli.projectmanagementsystem.service.DeveloperService;
 import com.dermentli.projectmanagementsystem.service.ProjectService;
 
+import java.sql.SQLException;
+
 public class  Main {
 
     private static final ProjectService projectService = new ProjectService(new ProjectDAO());
     private static final DeveloperService developerService = new DeveloperService(new DeveloperDAO());
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         System.out.println(projectService.getProjDevSalary(4));
         System.out.println(developerService.getListOfDevsOnProject(4));
         System.out.println(developerService.getListOfJavaDevs());
