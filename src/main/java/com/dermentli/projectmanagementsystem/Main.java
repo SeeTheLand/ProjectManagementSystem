@@ -1,7 +1,8 @@
 package com.dermentli.projectmanagementsystem;
 
-import com.dermentli.projectmanagementsystem.dao.DeveloperDAO;
-import com.dermentli.projectmanagementsystem.dao.ProjectDAO;
+import com.dermentli.projectmanagementsystem.dao.JdbcDeveloperDAO;
+import com.dermentli.projectmanagementsystem.dao.JdbcDevelopersProjectsDAO;
+import com.dermentli.projectmanagementsystem.dao.JdbcProjectDAO;
 import com.dermentli.projectmanagementsystem.service.DeveloperService;
 import com.dermentli.projectmanagementsystem.service.ProjectService;
 
@@ -9,15 +10,16 @@ import java.sql.SQLException;
 
 public class  Main {
 
-    private static final ProjectService projectService = new ProjectService(new ProjectDAO());
-    private static final DeveloperService developerService = new DeveloperService(new DeveloperDAO());
+    private static final ProjectService projectService = new ProjectService(new JdbcProjectDAO());
+    private static final DeveloperService developerService = new DeveloperService(new JdbcDeveloperDAO(), new JdbcDevelopersProjectsDAO());
 
     public static void main(String[] args) throws SQLException {
-        System.out.println(projectService.getProjDevSalary(4));
-        System.out.println(developerService.getListOfDevsOnProject(4));
-        System.out.println(developerService.getListOfJavaDevs());
-        System.out.println(developerService.getListOfMidDevs());
-        System.out.println(projectService.getProjDevNumber());
+        developerService.getListOfDevsOnProject(1);
+//        System.out.println(projectService.getProjDevSalary(4));
+//        System.out.println(developerService.getListOfDevsOnProject(4));
+//        System.out.println(developerService.getListOfJavaDevs());
+//        System.out.println(developerService.getListOfMidDevs());
+//        System.out.println(projectService.getProjDevNumber());
     }
 
 //    INSERT INTO projects(name, latest_release_date, cost) VALUES ('New Cool Project', 2025, 580);

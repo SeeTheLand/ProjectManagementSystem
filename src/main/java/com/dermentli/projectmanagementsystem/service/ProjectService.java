@@ -1,6 +1,6 @@
 package com.dermentli.projectmanagementsystem.service;
 
-import com.dermentli.projectmanagementsystem.dao.ProjectDAO;
+import com.dermentli.projectmanagementsystem.dao.JdbcProjectDAO;
 import com.dermentli.projectmanagementsystem.domain.Project;
 import lombok.RequiredArgsConstructor;
 
@@ -10,13 +10,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectService {
 
-    private final ProjectDAO projectDAO;
+    private final JdbcProjectDAO jdbcProjectDAO;
 
-    public Integer getProjDevSalary(Integer projectId) throws SQLException {
-        return projectDAO.processQueryForProjDevSalary(projectId);
-    }
-
-    public List<Project> getProjDevNumber() throws SQLException {
-        return projectDAO.processQueryForProjDevNumber();
-    }
+//    public Integer getProjDevSalary(Integer projectId) throws SQLException {
+//        return jdbcProjectDAO.processQueryForProjDevSalary(projectId);
+//    }
+//
+//    public List<Project> getProjDevNumber() throws SQLException {
+//        return jdbcProjectDAO.processQueryForProjDevNumber();
+//    }
 }
