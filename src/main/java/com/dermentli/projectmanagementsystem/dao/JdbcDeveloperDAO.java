@@ -38,7 +38,7 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
     }
 
     @Override
-    public void removeById(long id) {
+    public void removeById(Long id) {
         try(final Connection connection = dataSource.getConnection();
             final PreparedStatement statement = connection.prepareStatement(REMOVE_BY_ID)) {
             logger.debug("Remove developer by id: {}", id);
@@ -54,7 +54,7 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
     }
 
     @Override
-    public Optional<Developer> findById(long id) {
+    public Optional<Developer> findById(Long id) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(FIND_BY_ID)) {
             logger.debug("Get developer by id: {}", id);

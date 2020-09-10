@@ -2,7 +2,7 @@ package com.dermentli.projectmanagementsystem.dao;
 
 import com.dermentli.projectmanagementsystem.domain.Developer;
 
-public interface DeveloperDAO extends DAO<Developer> {
+public interface DeveloperDAO extends DAO<Developer, Long> {
     String TABLE_NAME = "developers";
     String INSERT = "INSERT INTO " + TABLE_NAME + "(name, age, gender, salary) VALUES (?, ?, ?, ?)";
     String FIND_BY_ID = "SELECT * FROM " + TABLE_NAME + " WHERE id=?";

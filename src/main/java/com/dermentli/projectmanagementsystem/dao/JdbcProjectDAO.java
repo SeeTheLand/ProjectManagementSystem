@@ -35,7 +35,7 @@ public class JdbcProjectDAO implements ProjectDAO {
     public void remove(Project project) { removeById(project.getId()); }
 
     @Override
-    public void removeById(long id) {
+    public void removeById(Long id) {
         try(final Connection connection = dataSource.getConnection();
             final PreparedStatement statement = connection.prepareStatement(REMOVE_BY_ID)) {
             logger.debug("Remove project by id: {}", id);
@@ -51,7 +51,7 @@ public class JdbcProjectDAO implements ProjectDAO {
     }
 
     @Override
-    public Optional<Project> findById(long id) {
+    public Optional<Project> findById(Long id) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(FIND_BY_ID)) {
             logger.debug("Get project by id: {}", id);
