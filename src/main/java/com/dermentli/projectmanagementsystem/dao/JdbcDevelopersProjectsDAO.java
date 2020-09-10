@@ -1,6 +1,7 @@
 package com.dermentli.projectmanagementsystem.dao;
 
 import com.dermentli.projectmanagementsystem.domain.Developer;
+import com.dermentli.projectmanagementsystem.domain.DeveloperProjectKey;
 import com.dermentli.projectmanagementsystem.domain.DevelopersProjects;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -31,14 +32,15 @@ public class JdbcDevelopersProjectsDAO implements DevelopersProjectsDAO {
     }
 
     @Override
-    public void remove(DevelopersProjects developersProjects) { removeById(developersProjects.getProject_id()); }
+    public void remove(DevelopersProjects developersProjects) { removeById(developersProjects.getDeveloperProjectID()); }
 
     @Override
-    public void removeById(long id) {
+    public void removeById(DeveloperProjectKey id) {
         try(final Connection connection = dataSource.getConnection();
             final PreparedStatement statement = connection.prepareStatement(REMOVE_BY_ID)) {
             logger.debug("Remove developersProjects by id: {}", id);
-            statement.setLong(1, id);
+            statement.setLong(1, id.getDeveloperID());
+            statement.setLong(1, id.getProjectID());
             if (statement.executeUpdate()>0) {
                 logger.debug("Element with id {} removed from {} table", id, TABLE_NAME);
             } else {
@@ -50,11 +52,12 @@ public class JdbcDevelopersProjectsDAO implements DevelopersProjectsDAO {
     }
 
     @Override
-    public Optional<DevelopersProjects> findById(long id) {
+    public Optional<DevelopersProjects> findById(DeveloperProjectKey id) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(FIND_BY_ID)) {
             logger.debug("Get developer by id: {}", id);
-            statement.setLong(1, id);
+            statement.setLong(1, id.getDeveloperID());
+            statement.setLong(1, id.getProjectID());
             try (final ResultSet res = statement.executeQuery()) {
                 if (res.next()) {
                     final Long project_id = res.getLong("project_id");
