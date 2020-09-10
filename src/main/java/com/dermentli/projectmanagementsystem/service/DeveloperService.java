@@ -17,12 +17,8 @@ public class DeveloperService {
     private final JdbcDeveloperDAO jdbcDeveloperDAO;
     private final JdbcDevelopersProjectsDAO jdbcDevelopersProjectsDAO;
 
-    public List<Developer> getListOfDevsOnProject (Integer projectId) throws SQLException {
-        //получаем список ид разработчиков на проекте
-        List<Integer> targetDevelopersIds = new ArrayList<>();
-        Optional<DevelopersProjects> developersProjects = jdbcDevelopersProjectsDAO.findById(projectId);
-        List<Developer> list = null;
-        return list;
+    public Optional<Developer> getListOfDevsOnProject (Long projectId) {
+        return jdbcDeveloperDAO.getDeveolopersByProjectID(projectId);
     }
 
 //    public List<Developer> getListOfJavaDevs () throws SQLException {

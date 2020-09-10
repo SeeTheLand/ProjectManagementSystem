@@ -59,12 +59,12 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
              final PreparedStatement statement = connection.prepareStatement(FIND_BY_ID)) {
             logger.debug("Get developer by id: {}", id);
             statement.setLong(1, id);
-            try (final ResultSet res = statement.executeQuery()) {
-                if (res.next()) {
-                    final String name = res.getString("name");
-                    final int age = res.getInt("age");
-                    final String gender = res.getString("gender");
-                    final int salary = res.getInt("salary");
+            try (final ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    final String name = resultSet.getString("name");
+                    final int age = resultSet.getInt("age");
+                    final String gender = resultSet.getString("gender");
+                    final int salary = resultSet.getInt("salary");
                     logger.debug("Developer with id: {} returned", id);
                     return Optional.of(new Developer(id, name, age, gender, salary));
                 } else {
@@ -82,17 +82,16 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
         logger.debug("Trying to get all elements from table: {}", TABLE_NAME);
         try (final Connection connection = dataSource.getConnection();
              final Statement stmt = connection.createStatement();
-             final ResultSet rs = stmt.executeQuery(FIND_ALL)) {
+             final ResultSet resultSet = stmt.executeQuery(FIND_ALL)) {
                 final List<Developer> developers = new ArrayList<>();
-                while (rs.next()) {
-                    final Long id = rs.getLong("id");
-                    final String name = rs.getString("name");
-                    final int age = rs.getInt("age");
-                    final String gender = rs.getString("gender");
-                    final int salary = rs.getInt("salary");
+                while (resultSet.next()) {
+                    final Long id = resultSet.getLong("id");
+                    final String name = resultSet.getString("name");
+                    final int age = resultSet.getInt("age");
+                    final String gender = resultSet.getString("gender");
+                    final int salary = resultSet.getInt("salary");
                     developers.add(new Developer(id, name, age, gender, salary));
             }
-
             if (developers.size() > 0) {
                 logger.debug("Return {} rows after get all queries for table {}", developers.size(), TABLE_NAME);
             } else {
@@ -123,5 +122,30 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
             add(developer);
         }
         logger.debug("Added all elements: {}, to the table {}", developers, TABLE_NAME);
+    }
+
+    public Optional<Developer> getDeveolopersByProjectID(Long projectID) {
+        logger.debug("Trying to get developers by product id {}", projectID);
+        try (final Connection connection = dataSource.getConnection();
+            final PreparedStatement statement = connection.prepareStatement(GET_DEVELOPERS_ON_PROJECT)) {
+                logger.debug("Trying to get developers working on project {}", projectID);
+                statement.setLong(1, projectID);
+                try (final ResultSet resultSet = statement.executeQuery()) {
+                    final List<Developer> developers = new ArrayList<>();
+                    if (resultSet.next()) {
+                        final Long id = resultSet.getLong("id");
+                        final String name = resultSet.getString("name");
+                        final int age = resultSet.getInt("age");
+                        final String gender = resultSet.getString("gender");
+                        final int salary = resultSet.getInt("salary");
+                        return Optional.of(new Developer(id, name, age, gender, salary));
+                    } else {
+                        logger.warn("There are no developers for project with id {}", projectID);
+                        return Optional.empty();
+                    }
+                }
+        } catch (SQLException e) {
+            throw new ExceptionDAO("Error while finding element", e);
+        }
     }
 }

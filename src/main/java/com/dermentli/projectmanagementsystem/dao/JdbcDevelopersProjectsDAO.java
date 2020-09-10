@@ -1,6 +1,5 @@
 package com.dermentli.projectmanagementsystem.dao;
 
-import com.dermentli.projectmanagementsystem.domain.Developer;
 import com.dermentli.projectmanagementsystem.domain.DeveloperProjectKey;
 import com.dermentli.projectmanagementsystem.domain.DevelopersProjects;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class JdbcDevelopersProjectsDAO implements DevelopersProjectsDAO {
             final PreparedStatement statement = connection.prepareStatement(INSERT)) {
             logger.debug("Adding {} to table", developersProjects);
             statement.setLong(1, developersProjects.getProject_id());
-            statement.setLong(2, developersProjects.getDevelopers_id());
+            statement.setLong(2, developersProjects.getDeveloper_id());
             statement.executeUpdate();
             logger.debug("Developer {} added to table {}", developersProjects, TABLE_NAME);
         } catch (SQLException e) {
