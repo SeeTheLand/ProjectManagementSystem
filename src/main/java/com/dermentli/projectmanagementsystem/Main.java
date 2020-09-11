@@ -13,8 +13,8 @@ public class  Main {
     private static final ProjectService projectService = new ProjectService(new JdbcProjectDAO());
     private static final DeveloperService developerService = new DeveloperService(new JdbcDeveloperDAO(), new JdbcDevelopersProjectsDAO());
 
-    public static void main(String[] args) throws SQLException {
-        developerService.getListOfDevsOnProject(1L);
+    public static void main(String[] args) {
+        System.out.println(developerService.getListOfDevsOnProject(1L));
 //        System.out.println(projectService.getProjDevSalary(4));
 //        System.out.println(developerService.getListOfDevsOnProject(4));
 //        System.out.println(developerService.getListOfJavaDevs());

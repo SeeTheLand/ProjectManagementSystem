@@ -17,7 +17,7 @@ public class JdbcDevelopersProjectsDAO implements DevelopersProjectsDAO {
     private final DataSource dataSource = new DataSource();
 
     @Override
-    public void add(DevelopersProjects developersProjects) throws SQLException {
+    public void add(DevelopersProjects developersProjects) {
         try(final Connection connection = dataSource.getConnection();
             final PreparedStatement statement = connection.prepareStatement(INSERT)) {
             logger.debug("Adding {} to table", developersProjects);
@@ -110,7 +110,7 @@ public class JdbcDevelopersProjectsDAO implements DevelopersProjectsDAO {
     }
 
     @Override
-    public void addAll(List<DevelopersProjects> developersProjects) throws SQLException {
+    public void addAll(List<DevelopersProjects> developersProjects) {
         logger.debug("Trying to add elements {} to the table {}", developersProjects, TABLE_NAME);
         for (DevelopersProjects developersProject : developersProjects) {
             add(developersProject);

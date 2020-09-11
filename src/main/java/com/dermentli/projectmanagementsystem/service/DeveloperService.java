@@ -17,8 +17,8 @@ public class DeveloperService {
     private final JdbcDeveloperDAO jdbcDeveloperDAO;
     private final JdbcDevelopersProjectsDAO jdbcDevelopersProjectsDAO;
 
-    public Optional<Developer> getListOfDevsOnProject (Long projectId) {
-        return jdbcDeveloperDAO.getDeveolopersByProjectID(projectId);
+    public List<Developer> getListOfDevsOnProject (Long projectId) {
+        return jdbcDeveloperDAO.getDevelopersByProjectID(projectId);
     }
 
 //    public List<Developer> getListOfJavaDevs () throws SQLException {
