@@ -12,9 +12,9 @@ public class ProjectService {
 
     private final JdbcProjectDAO jdbcProjectDAO;
 
-//    public Integer getProjDevSalary(Integer projectId) throws SQLException {
-//        return jdbcProjectDAO.processQueryForProjDevSalary(projectId);
-//    }
+    public Integer getDevSalariesOnProject(Long projectId) {
+        return jdbcProjectDAO.getDevSalariesOnProject(projectId);
+    }
 //
 //    public List<Project> getProjDevNumber() throws SQLException {
 //        return jdbcProjectDAO.processQueryForProjDevNumber();

@@ -119,4 +119,20 @@ public class JdbcProjectDAO implements ProjectDAO {
         }
         logger.debug("Added all elements: {}, to the table {}", projects, TABLE_NAME);
     }
+
+    public Integer getDevSalariesOnProject(Long projectID) {
+        try (final Connection connection = dataSource.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(SALARY_SUM_ON_PROJECT)) {
+            logger.debug("Get Developers salary sum by project id: {}", projectID);
+            statement.setLong(1, projectID);
+            final ResultSet rs = statement.executeQuery();
+            Integer salarySum = null;
+            while (rs.next()) {
+                salarySum = rs.getInt("sum");
+            }
+            return salarySum;
+        } catch (SQLException e) {
+            throw new ExceptionDAO("Error while executing getDevSalariesOnProject", e);
+        }
+    }
 }

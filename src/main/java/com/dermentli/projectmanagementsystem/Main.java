@@ -14,7 +14,9 @@ public class  Main {
     private static final DeveloperService developerService = new DeveloperService(new JdbcDeveloperDAO(), new JdbcDevelopersProjectsDAO());
 
     public static void main(String[] args) {
+        System.out.println(projectService.getDevSalariesOnProject(1L));
         System.out.println(developerService.getListOfDevsOnProject(1L));
+        System.out.println(developerService.);
 //        System.out.println(projectService.getProjDevSalary(4));
 //        System.out.println(developerService.getListOfDevsOnProject(4));
 //        System.out.println(developerService.getListOfJavaDevs());
