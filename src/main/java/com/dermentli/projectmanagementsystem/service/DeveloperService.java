@@ -21,6 +21,12 @@ public class DeveloperService {
         return jdbcDeveloperDAO.getDevelopersByProjectID(projectId);
     }
 
+    public List<Developer> getDevelopersByLanguage (String language) {
+        return jdbcDeveloperDAO.getDevelopersByLanguage(language);
+    }
+
+
+
 //    public List<Developer> getListOfJavaDevs () throws SQLException {
 //        return developerDAO.processQueryListOfJavaDevs();
 //    }

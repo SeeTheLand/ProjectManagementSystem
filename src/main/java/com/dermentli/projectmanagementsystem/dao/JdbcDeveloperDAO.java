@@ -125,14 +125,29 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
         }
     }
 
+    public List<Developer> getDevelopersByLanguage(String language) {
+        logger.debug("Trying to get developers by product language {}", language);
+        try (final Connection connection = dataSource.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(GET_LANGUAGE_DEVELOPERS)) {
+            logger.debug("Trying to get developers with language {}", language);
+            statement.setString(1, language);
+            logger.debug("The final statement is {}", statement);
+            try (final ResultSet resultSet = statement.executeQuery()) {
+                return getDevelopers(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new ExceptionDAO("Error while finding element", e);
+        }
+    }
+
     private List<Developer> getDevelopers(ResultSet resultSet) throws SQLException {
         final List<Developer> developers = new ArrayList<>();
         while (resultSet.next()) {
-            final Long id = resultSet.getLong("id");
-            final String name = resultSet.getString("name");
-            final int age = resultSet.getInt("age");
-            final String gender = resultSet.getString("gender");
-            final int salary = resultSet.getInt("salary");
+            final Long id = resultSet.getLong(1);
+            final String name = resultSet.getString(2);
+            final int age = resultSet.getInt(3);
+            final String gender = resultSet.getString(4);
+            final int salary = resultSet.getInt(5);
             developers.add(new Developer(id, name, age, gender, salary));
         }
         if (developers.size() > 0) {
@@ -142,4 +157,5 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
         }
         return developers;
     }
+
 }
