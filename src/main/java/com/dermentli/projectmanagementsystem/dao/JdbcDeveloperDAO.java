@@ -140,6 +140,20 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
         }
     }
 
+    public List<Developer> getDevelopersByLevel(String level) {
+        logger.debug("Trying to get developers by product language {}", level);
+        try (final Connection connection = dataSource.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(GET_LEVEL_DEVELOPERS)) {
+            logger.debug("Trying to get developers with level {}", level);
+            statement.setString(1, level);
+            try (final ResultSet resultSet = statement.executeQuery()) {
+                return getDevelopers(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new ExceptionDAO("Error while finding element", e);
+        }
+    }
+
     private List<Developer> getDevelopers(ResultSet resultSet) throws SQLException {
         final List<Developer> developers = new ArrayList<>();
         while (resultSet.next()) {

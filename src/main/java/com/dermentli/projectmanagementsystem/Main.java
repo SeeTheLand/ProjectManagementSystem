@@ -6,22 +6,17 @@ import com.dermentli.projectmanagementsystem.dao.JdbcProjectDAO;
 import com.dermentli.projectmanagementsystem.service.DeveloperService;
 import com.dermentli.projectmanagementsystem.service.ProjectService;
 
-import java.sql.SQLException;
-
 public class  Main {
 
     private static final ProjectService projectService = new ProjectService(new JdbcProjectDAO());
-    private static final DeveloperService developerService = new DeveloperService(new JdbcDeveloperDAO(), new JdbcDevelopersProjectsDAO());
+    private static final DeveloperService developerService = new DeveloperService(new JdbcDeveloperDAO());
 
     public static void main(String[] args) {
-//        System.out.println(projectService.getDevSalariesOnProject(1L));
-//        System.out.println(developerService.getListOfDevsOnProject(1L));
+        System.out.println(projectService.getDevSalariesOnProject(1L));
+        System.out.println(developerService.getListOfDevsOnProject(1L));
         System.out.println(developerService.getDevelopersByLanguage("Java"));
-//        System.out.println(projectService.getProjDevSalary(4));
-//        System.out.println(developerService.getListOfDevsOnProject(4));
-//        System.out.println(developerService.getListOfJavaDevs());d
-//        System.out.println(developerService.getListOfMidDevs());
-//        System.out.println(projectService.getProjDevNumber());
+        System.out.println(developerService.getDevelopersByLevel("Middle"));
+        System.out.println(projectService.getProjectsInPreparedFormat());
     }
 
 //    INSERT INTO projects(name, latest_release_date, cost) VALUES ('New Cool Project', 2025, 580);

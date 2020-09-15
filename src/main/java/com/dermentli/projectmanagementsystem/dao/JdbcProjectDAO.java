@@ -83,8 +83,8 @@ public class JdbcProjectDAO implements ProjectDAO {
             while (rs.next()) {
                 final Long id = rs.getLong("id");
                 final String name = rs.getString("name");
-                final int latest_release_date = rs.getInt("latest_release_date");
-                final int cost = rs.getInt("cost");
+                final Integer latest_release_date = rs.getInt("latest_release_date");
+                final Integer cost = rs.getInt("cost");
                 projects.add(new Project(id, name, latest_release_date, cost));
             }
 
@@ -133,6 +133,32 @@ public class JdbcProjectDAO implements ProjectDAO {
             return salarySum;
         } catch (SQLException e) {
             throw new ExceptionDAO("Error while executing getDevSalariesOnProject", e);
+        }
+    }
+
+    public List<Project> getProjectsInPreparedFormat() {
+        logger.debug("Trying to get all elements from table: {} with specific formating", TABLE_NAME);
+        try (final Connection connection = dataSource.getConnection();
+             final Statement stmt = connection.createStatement();
+             final ResultSet rs = stmt.executeQuery(PROJECTS_WITH_EXTRA_FIELDS)) {
+            final List<Project> projects = new ArrayList<>();
+            while (rs.next()) {
+                final Long id = rs.getLong(1);
+                final String name = rs.getString(2);
+                final Integer latest_release_date = rs.getInt(3);
+                final Integer cost = rs.getInt(4);
+                final Integer count = rs.getInt(5);
+                projects.add(new Project(id, name, latest_release_date, cost, count));
+            }
+
+            if (projects.size() > 0) {
+                logger.debug("Return {} rows after get all queries for table {}", projects.size(), TABLE_NAME);
+            } else {
+                logger.debug("Empty list after get all queries for table {}", TABLE_NAME);
+            }
+            return projects;
+        } catch (SQLException e) {
+            throw new ExceptionDAO("Error while executing findAll", e);
         }
     }
 }
