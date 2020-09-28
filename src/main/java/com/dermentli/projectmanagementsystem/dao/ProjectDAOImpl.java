@@ -5,16 +5,16 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class JdbcProjectDAO implements ProjectDAO {
+public class ProjectDAOImpl implements ProjectDAO {
     private static final Logger logger = LogManager.getLogger();
-    private final DataSource dataSource = new DataSource();
-
+    private final DataSource dataSource;
 
     @Override
     public void add(Project project) throws SQLException {
@@ -27,7 +27,8 @@ public class JdbcProjectDAO implements ProjectDAO {
             statement.executeUpdate();
             logger.debug("Developer {} added to table {}", project, TABLE_NAME);
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while adding element", e);
+            logger.error("Error while adding element. Cause: " + e.getMessage());
+            throw new DaoException("Error while adding element. Cause: " + e.getMessage());
         }
     }
 
@@ -46,7 +47,8 @@ public class JdbcProjectDAO implements ProjectDAO {
                 logger.error("Can't remove element with id {} from {} table", id, TABLE_NAME);
             }
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while removing element", e);
+            logger.error("Error while removing element. Cause: " + e.getMessage());
+            throw new DaoException("Error while removing element. Cause: " + e.getMessage());
         }
     }
 
@@ -69,7 +71,8 @@ public class JdbcProjectDAO implements ProjectDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while finding element", e);
+            logger.error("Error while finding element. Cause: " + e.getMessage());
+            throw new DaoException("Error while finding element. Cause: " + e.getMessage());
         }
     }
 
@@ -95,7 +98,8 @@ public class JdbcProjectDAO implements ProjectDAO {
             }
             return projects;
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while executing findAll", e);
+            logger.error("Error while executing findAll. Cause: " + e.getMessage());
+            throw new DaoException("Error while executing findAll. Cause: " + e.getMessage());
         }
     }
 
@@ -107,7 +111,8 @@ public class JdbcProjectDAO implements ProjectDAO {
             final int numOfRows = statement.executeUpdate(CLEAR_TABLE);
             logger.debug("Table {} cleared, removed {} rows.", TABLE_NAME, numOfRows);
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while executing removeAll", e);
+            logger.error("Error while executing removeAll. Cause: " + e.getMessage());
+            throw new DaoException("Error while executing removeAll. Cause: " + e.getMessage());
         }
     }
 
@@ -120,19 +125,18 @@ public class JdbcProjectDAO implements ProjectDAO {
         logger.debug("Added all elements: {}, to the table {}", projects, TABLE_NAME);
     }
 
-    public Integer getDevSalariesOnProject(Long projectID) {
+    public Optional<Integer> getDevSalariesOnProject(Long projectID) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(SALARY_SUM_ON_PROJECT)) {
             logger.debug("Get Developers salary sum by project id: {}", projectID);
             statement.setLong(1, projectID);
             final ResultSet rs = statement.executeQuery();
-            Integer salarySum = null;
-            while (rs.next()) {
-                salarySum = rs.getInt("sum");
-            }
-            return salarySum;
+            BigDecimal salarySum = null;
+            if(rs.next()) { return Optional.of(rs.getInt("sum")); }
+            else return Optional.empty();
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while executing getDevSalariesOnProject", e);
+            logger.error("Error while executing getDevSalariesOnProject. Cause: " + e.getMessage());
+            throw new DaoException("Error while executing getDevSalariesOnProject. Cause: " + e.getMessage());
         }
     }
 
@@ -158,7 +162,8 @@ public class JdbcProjectDAO implements ProjectDAO {
             }
             return projects;
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while executing findAll", e);
+            logger.error("Error while executing findAll. Cause: " + e.getMessage());
+            throw new DaoException("Error while executing findAll. Cause: " + e.getMessage());
         }
     }
 }

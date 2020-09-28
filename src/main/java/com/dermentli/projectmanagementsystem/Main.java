@@ -1,21 +1,20 @@
 package com.dermentli.projectmanagementsystem;
 
-import com.dermentli.projectmanagementsystem.dao.JdbcDeveloperDAO;
-import com.dermentli.projectmanagementsystem.dao.JdbcDevelopersProjectsDAO;
-import com.dermentli.projectmanagementsystem.dao.JdbcProjectDAO;
+import com.dermentli.projectmanagementsystem.dao.DeveloperDAOImpl;
+import com.dermentli.projectmanagementsystem.dao.ProjectDAOImpl;
 import com.dermentli.projectmanagementsystem.service.DeveloperService;
 import com.dermentli.projectmanagementsystem.service.ProjectService;
 
 public class  Main {
 
-    private static final ProjectService projectService = new ProjectService(new JdbcProjectDAO());
-    private static final DeveloperService developerService = new DeveloperService(new JdbcDeveloperDAO());
+    private static final ProjectService projectService = new ProjectService(new ProjectDAOImpl());
+    private static final DeveloperService developerService = new DeveloperService(new DeveloperDAOImpl());
 
     public static void main(String[] args) {
-        System.out.println(projectService.getDevSalariesOnProject(1L));
-        System.out.println(developerService.getListOfDevsOnProject(1L));
-        System.out.println(developerService.getDevelopersByLanguage("Java"));
-        System.out.println(developerService.getDevelopersByLevel("Middle"));
+//        System.out.println(projectService.getDevSalariesOnProject(1L));
+//        System.out.println(developerService.getListOfDevsOnProject(1L));
+//        System.out.println(developerService.getDevelopersByLanguage("Java"));
+//        System.out.println(developerService.getDevelopersByLevel("Middle"));
         System.out.println(projectService.getProjectsInPreparedFormat());
     }
 

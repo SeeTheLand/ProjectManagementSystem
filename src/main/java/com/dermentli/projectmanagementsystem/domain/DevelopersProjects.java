@@ -6,11 +6,11 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class DevelopersProjects {
-    private Long project_id;
-    private Long developer_id;
+    private Long projectID;
+    private Long developerID;
 
 
     public DeveloperProjectKey getDeveloperProjectID() {
-        return new DeveloperProjectKey(this.project_id, this.developer_id);
+        return new DeveloperProjectKey(this.projectID, this.developerID);
     }
 }

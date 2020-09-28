@@ -3,6 +3,7 @@ package com.dermentli.projectmanagementsystem.dao;
 import com.dermentli.projectmanagementsystem.domain.Developer;
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @RequiredArgsConstructor
-public class JdbcDeveloperDAO implements DeveloperDAO {
+public class DeveloperDAOImpl implements DeveloperDAO {
     private static final Logger logger = LogManager.getLogger();
-    private final DataSource dataSource = new DataSource();
+    private final DataSource dataSource;
 
 
     @Override
@@ -25,11 +26,12 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
             statement.setString(1, developer.getName());
             statement.setInt(2, developer.getAge());
             statement.setString(3, developer.getGender());
-            statement.setInt(4, developer.getSalary());
+            statement.setBigDecimal(4, developer.getSalary());
             statement.executeUpdate();
             logger.debug("Developer {} added to table {}", developer, TABLE_NAME);
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while adding element", e);
+            logger.error("Error while adding element. Cause: " + e.getMessage());
+            throw new DaoException("Error while adding element. Cause: " + e.getMessage());
         }
     }
 
@@ -50,7 +52,8 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
                 logger.error("Can't remove element with id {} from {} table", id, TABLE_NAME);
             }
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while removing element", e);
+            logger.error("Error while removing element. Cause: " + e.getMessage());
+            throw new DaoException("Error while removing element. Cause: " + e.getMessage());
         }
     }
 
@@ -65,7 +68,7 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
                     final String name = resultSet.getString("name");
                     final int age = resultSet.getInt("age");
                     final String gender = resultSet.getString("gender");
-                    final int salary = resultSet.getInt("salary");
+                    final BigDecimal salary = resultSet.getBigDecimal("salary");
                     logger.debug("Developer with id: {} returned", id);
                     return Optional.of(new Developer(id, name, age, gender, salary));
                 } else {
@@ -74,7 +77,8 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while finding element", e);
+            logger.error("Error while finding element. Cause: " + e.getMessage());
+            throw new DaoException("Error while finding element. Cause: " + e.getMessage());
         }
     }
 
@@ -86,7 +90,8 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
              final ResultSet resultSet = stmt.executeQuery(FIND_ALL)) {
             return getDevelopers(resultSet);
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while executing findAll", e);
+            logger.error("Error while executing findAll. Cause: " + e.getMessage());
+            throw new DaoException("Error while executing findAll. Cause: " + e.getMessage());
         }
     }
 
@@ -98,7 +103,8 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
             final int numOfRows = statement.executeUpdate(CLEAR_TABLE);
             logger.debug("Table {} cleared, removed {} rows.", TABLE_NAME, numOfRows);
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while executing removeAll", e);
+            logger.error("Error while executing removeAll. Cause: " + e.getMessage());
+            throw new DaoException("Error while executing removeAll. Cause: " + e.getMessage());
         }
     }
 
@@ -121,7 +127,8 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
                 return getDevelopers(resultSet);
             }
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while finding element", e);
+            logger.error("Error while finding element. Cause: " + e.getMessage());
+            throw new DaoException("Error while finding element. Cause: " + e.getMessage());
         }
     }
 
@@ -136,7 +143,8 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
                 return getDevelopers(resultSet);
             }
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while finding element", e);
+            logger.error("Error while finding element. Cause: " + e.getMessage());
+            throw new DaoException("Error while finding element. Cause: " + e.getMessage());
         }
     }
 
@@ -150,7 +158,8 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
                 return getDevelopers(resultSet);
             }
         } catch (SQLException e) {
-            throw new ExceptionDAO("Error while finding element", e);
+            logger.error("Error while finding element. Cause: " + e.getMessage());
+            throw new DaoException("Error while finding element. Cause: " + e.getMessage());
         }
     }
 
@@ -161,7 +170,7 @@ public class JdbcDeveloperDAO implements DeveloperDAO {
             final String name = resultSet.getString(2);
             final int age = resultSet.getInt(3);
             final String gender = resultSet.getString(4);
-            final int salary = resultSet.getInt(5);
+            final BigDecimal salary = resultSet.getBigDecimal(5);
             developers.add(new Developer(id, name, age, gender, salary));
         }
         if (developers.size() > 0) {

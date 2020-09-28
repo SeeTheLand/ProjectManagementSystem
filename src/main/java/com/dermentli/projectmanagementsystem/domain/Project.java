@@ -5,8 +5,7 @@ import lombok.*;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"id"})
-//@ToString(exclude = "count")
+@EqualsAndHashCode(of = "id")
 public class Project {
     private Long id;
     private String name;
@@ -14,10 +13,10 @@ public class Project {
     private Integer cost;
     private Integer count;
 
-    public Project(Long id, String name, int latest_release_date, int cost) {
+    public Project(Long id, String name, int latestReleaseDate, int cost) {
         this.id = id;
         this.name = name;
-        this.latestReleaseDate = latest_release_date;
+        this.latestReleaseDate = latestReleaseDate;
         this.cost = cost;
     }
 }
