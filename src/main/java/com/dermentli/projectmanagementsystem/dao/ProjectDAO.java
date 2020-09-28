@@ -2,66 +2,15 @@ package com.dermentli.projectmanagementsystem.dao;
 
 import com.dermentli.projectmanagementsystem.domain.Project;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
-public class ProjectDAO extends GenericDAO {
-
-    public Integer processQueryForProjDevSalary (Integer projectId) throws SQLException {
-        return getProjDevSalary("SELECT sum(salary)" +
-                "FROM developers d" +
-                "         INNER JOIN developers_projects dp on d.id = dp.developer_id" +
-                "         INNER JOIN  projects p on dp.project_id = p.id " +
-                "WHERE p.id = " + projectId + ";");
-    }
-
-    public List<Project> processQueryForProjDevNumber () throws SQLException {
-        return getProjectInfo("SELECT latest_release_date, p.name, count(developer_id)\n" +
-                "FROM projects p\n" +
-                "INNER JOIN developers_projects dp on p.id = dp.project_id\n" +
-                "INNER JOIN developers d on dp.developer_id = d.id\n" +
-                "group by latest_release_date, p.name;");
-    }
-
-
-    @Override
-    Connection setConnection(String URL, String username, String password) throws SQLException {
-        return DriverManager.getConnection(URL, username, password);
-    }
-
-    List<Project> getProjectInfo (String query) throws SQLException {
-        try (Connection connection = setConnection(URL, username, password);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
-            List<Project> projects  = new ArrayList<>();
-            while (resultSet.next()) {
-                Project project = new Project();
-                project.setLatestReleaseDate(resultSet.getInt("latest_release_date"));
-                project.setName(resultSet.getString("name"));
-                project.setNumberOfDevelopers(resultSet.getInt("count"));
-                projects.add(project);
-            }
-            return projects;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return null;
-    }
-
-
-    Integer getProjDevSalary(String query) throws SQLException {
-        try (Connection connection = setConnection(URL, username, password);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(query);
-            Project project = new Project();
-            while (resultSet.next()) {
-                project.setSumSalary(resultSet.getInt("sum"));
-            }
-            return project.getSumSalary();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return null;
-    }
+public interface ProjectDAO extends DAO<Project, Long> {
+    String TABLE_NAME = "projects";
+    String TABLE_DEVELOPERS = "developers";
+    String TABLE_DEV_PROJ = "developers_projects";
+    String INSERT = "INSERT INTO " + TABLE_NAME + "(name, latest_release_date, cost) VALUES (?, ?, ?)";
+    String FIND_BY_ID = "SELECT * FROM " + TABLE_NAME + " WHERE id=?";
+    String REMOVE_BY_ID = "DELETE FROM " + TABLE_NAME + " WHERE id=?";
+    String CLEAR_TABLE = "DELETE FROM " + TABLE_NAME;
+    String FIND_ALL = "SELECT * FROM " + TABLE_NAME;
+    String SALARY_SUM_ON_PROJECT = "SELECT sum(salary) FROM " + TABLE_DEVELOPERS + " d INNER JOIN " + TABLE_DEV_PROJ + " dp on d.id = dp.developer_id INNER JOIN  " + TABLE_NAME + " p on dp.project_id = p.id WHERE p.id = ?";
+    String PROJECTS_WITH_EXTRA_FIELDS = "SELECT p.id, p.name, p.latest_release_date, p.cost, count(developer_id) FROM " + TABLE_NAME + " p RIGHT JOIN " + TABLE_DEV_PROJ + " dp on p.id = dp.project_id RIGHT JOIN " + TABLE_DEVELOPERS + " d on dp.developer_id = d.id group by p.id, p.name, p.latest_release_date, p.cost;";
 }

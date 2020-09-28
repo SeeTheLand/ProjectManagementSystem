@@ -1,14 +1,22 @@
 package com.dermentli.projectmanagementsystem.domain;
 
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 @Data
-@ToString(exclude = "sumSalary")
+@RequiredArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Project {
-    private Integer sumSalary;
-    private Integer latestReleaseDate;
+    private Long id;
     private String name;
-    private Integer numberOfDevelopers;
+    private Integer latestReleaseDate;
+    private Integer cost;
+    private Integer count;
 
+    public Project(Long id, String name, int latestReleaseDate, int cost) {
+        this.id = id;
+        this.name = name;
+        this.latestReleaseDate = latestReleaseDate;
+        this.cost = cost;
+    }
 }

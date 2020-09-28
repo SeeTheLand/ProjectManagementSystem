@@ -1,28 +1,26 @@
 package com.dermentli.projectmanagementsystem.service;
 
-import com.dermentli.projectmanagementsystem.dao.DeveloperDAO;
+import com.dermentli.projectmanagementsystem.dao.DeveloperDAOImpl;
 import com.dermentli.projectmanagementsystem.domain.Developer;
 import lombok.RequiredArgsConstructor;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @RequiredArgsConstructor
 public class DeveloperService {
 
-    private final DeveloperDAO developerDAO;
+    private final DeveloperDAOImpl developerDAOImpl;
 
-    public List<Developer> getListOfDevsOnProject (Integer projectId) throws SQLException {
-        return developerDAO.processQueryListOfDevsOnProject(projectId);
+    public List<Developer> getListOfDevsOnProject (Long projectId) {
+        return developerDAOImpl.getDevelopersByProjectID(projectId);
     }
 
-    public List<Developer> getListOfJavaDevs () throws SQLException {
-        return developerDAO.processQueryListOfJavaDevs();
+    public List<Developer> getDevelopersByLanguage (String language) {
+        return developerDAOImpl.getDevelopersByLanguage(language);
     }
 
-    public List<Developer> getListOfMidDevs () throws SQLException {
-        return developerDAO.processQueryListOfMidDevs();
+    public List<Developer> getDevelopersByLevel (String level) {
+        return developerDAOImpl.getDevelopersByLevel(level);
     }
-
 
 }

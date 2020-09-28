@@ -1,22 +1,20 @@
 package com.dermentli.projectmanagementsystem.service;
 
-import com.dermentli.projectmanagementsystem.dao.ProjectDAO;
+import com.dermentli.projectmanagementsystem.dao.ProjectDAOImpl;
 import com.dermentli.projectmanagementsystem.domain.Project;
 import lombok.RequiredArgsConstructor;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class ProjectService {
 
-    private final ProjectDAO projectDAO;
+    private final ProjectDAOImpl projectDAOImpl;
 
-    public Integer getProjDevSalary(Integer projectId) throws SQLException {
-        return projectDAO.processQueryForProjDevSalary(projectId);
+    public Optional<Integer> getDevSalariesOnProject(Long projectId) {
+        return projectDAOImpl.getDevSalariesOnProject(projectId);
     }
 
-    public List<Project> getProjDevNumber() throws SQLException {
-        return projectDAO.processQueryForProjDevNumber();
-    }
+    public List<Project> getProjectsInPreparedFormat() { return projectDAOImpl.getProjectsInPreparedFormat(); }
 }
