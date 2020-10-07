@@ -1,6 +1,7 @@
 package com.dermentli.projectmanagementsystem.dao;
 
 import com.dermentli.projectmanagementsystem.domain.Developer;
+import com.dermentli.projectmanagementsystem.error.DaoException;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
