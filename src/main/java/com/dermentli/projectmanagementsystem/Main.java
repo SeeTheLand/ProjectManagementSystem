@@ -11,11 +11,11 @@ public class  Main {
     private static final DeveloperService developerService = new DeveloperService(new DeveloperDAOImpl());
 
     public static void main(String[] args) {
-//        System.out.println(projectService.getDevSalariesOnProject(1L));
-//        System.out.println(developerService.getListOfDevsOnProject(1L));
-//        System.out.println(developerService.getDevelopersByLanguage("Java"));
-//        System.out.println(developerService.getDevelopersByLevel("Middle"));
-        System.out.println(projectService.getProjectsInPreparedFormat());
+        System.out.println(projectService.getDevSalariesOnProject(1L));
+        System.out.println(developerService.getListOfDevsOnProject(1L));
+        System.out.println(developerService.getDevelopersByLanguage("Java"));
+        System.out.println(developerService.getDevelopersByLevel("Middle"));
+        projectService.getProjectsInPreparedFormat();
     }
 
 //    INSERT INTO projects(name, latest_release_date, cost) VALUES ('New Cool Project', 2025, 580);

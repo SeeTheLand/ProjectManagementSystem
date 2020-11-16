@@ -1,5 +1,6 @@
 package com.dermentli.projectmanagementsystem.domain;
 
+import com.dermentli.projectmanagementsystem.dao.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +14,7 @@ public class Developer {
     private Long id;
     private String name;
     private int age;
-    private String gender;
     private BigDecimal salary;
+    private Gender gender;
 
 }

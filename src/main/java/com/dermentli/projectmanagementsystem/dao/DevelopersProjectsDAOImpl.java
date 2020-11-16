@@ -1,11 +1,14 @@
 package com.dermentli.projectmanagementsystem.dao;
 
+import com.dermentli.projectmanagementsystem.datasource.MyDataSourceFactory;
 import com.dermentli.projectmanagementsystem.domain.DeveloperProjectKey;
 import com.dermentli.projectmanagementsystem.domain.DevelopersProjects;
+import com.dermentli.projectmanagementsystem.error.DaoException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DevelopersProjectsDAOImpl implements DevelopersProjectsDAO {
     private static final Logger logger = LogManager.getLogger();
-    private final DataSource dataSource;
+    private final DataSource dataSource = MyDataSourceFactory.getMyPostrgresDataSource();
 
     @Override
     public void add(DevelopersProjects developersProjects) {

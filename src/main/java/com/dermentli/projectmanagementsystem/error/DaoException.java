@@ -1,4 +1,4 @@
-package com.dermentli.projectmanagementsystem.dao;
+package com.dermentli.projectmanagementsystem.error;
 
 import java.sql.SQLException;
 
