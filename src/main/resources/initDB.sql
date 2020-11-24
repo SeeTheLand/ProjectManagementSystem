@@ -12,7 +12,7 @@ DROP TYPE IF EXISTS gender CASCADE;
 DROP TYPE IF EXISTS level CASCADE;
 DROP TYPE IF EXISTS programing_language CASCADE;
 
-CREATE TYPE gender AS ENUM ('male', 'female', 'not mentioned');
+CREATE TYPE gender AS ENUM ('male', 'female', 'not_mentioned');
 CREATE TYPE level AS ENUM ('Junior', 'Middle', 'Senior');
 CREATE TYPE programing_language AS ENUM ('Java', 'C++', 'C#', 'JS');
 
@@ -20,6 +20,7 @@ CREATE TABLE developers(
                            id int GENERATED ALWAYS AS IDENTITY,
                            name varchar(50),
                            age int,
+                           salary int,
                            gender gender,
                            PRIMARY KEY (id)
 );
@@ -27,6 +28,7 @@ CREATE TABLE projects(
                          id int GENERATED ALWAYS AS IDENTITY,
                          name varchar(50),
                          latest_release_date int,
+                         cost int,
                          PRIMARY KEY (id)
 );
 CREATE TABLE developers_projects(

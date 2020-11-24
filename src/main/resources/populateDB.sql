@@ -20,11 +20,11 @@ VALUES ('Alex Smith', '29'),
        ('Arnold Schwarc', '74'),
        ('Gustavo Brain', '39'),
        ('Maria Summo', '19');
-INSERT INTO developers(name, age, gender)
-VALUES ('Agata Brown', '29', 'female'),
-       ('Stan Wawrinka', '30', 'male'),
-       ('Roger Bekker', '28', 'male'),
-       ('Samantha Stosur', '27', 'not mentioned');
+INSERT INTO developers(name, age, salary, gender)
+VALUES ('Agata Brown', '29', 3215, 'female'),
+       ('Stan Wawrinka', '30', 2356, 'male'),
+       ('Roger Bekker', '28', 5436, 'male'),
+       ('Samantha Stosur', '27', 42352346, 'not_mentioned');
 INSERT INTO languages(name)
 VALUES ('Java'),
        ('C++'),
@@ -34,22 +34,22 @@ INSERT INTO skills(level)
 VALUES ('Junior'),
        ('Middle'),
        ('Senior');
-INSERT INTO projects(name, latest_release_date)
-VALUES ('Shop Website On JS', '2021'),
-       ('Very cool bank project', '2022'),
-       ('New software for Tesla', '2023'),
-       ('Smart Watch', '2020'),
-       ('Global Security', '2025'),
-       ('Game Development', '2020'),
-       ('Solaris Pack', '2020'),
-       ('Bluetooth Shark', '2027'),
-       ('Global Investment', '2022'),
-       ('Twitter Pack', '2020'),
-       ('Vicious Glasses', '2026'),
-       ('Mars Satellite', '2030'),
-       ('Bakery Start', '2020'),
-       ('Instrument Profiler', '2021'),
-       ('Birthday Present', '2022');
+INSERT INTO projects(name, latest_release_date, cost)
+VALUES ('Shop Website On JS', '2021', 2000),
+       ('Very cool bank project', '2022', 1400),
+       ('New software for Tesla', '2023', 700),
+       ('Smart Watch', '2020', 700),
+       ('Global Security', '2025', 15500),
+       ('Game Development', '2020', 435000),
+       ('Solaris Pack', '2020', 34000),
+       ('Bluetooth Shark', '2027', 650000),
+       ('Global Investment', '2022', 43000),
+       ('Twitter Pack', '2020', 780),
+       ('Vicious Glasses', '2026', 720),
+       ('Mars Satellite', '2030', 14000),
+       ('Bakery Start', '2020', 900),
+       ('Instrument Profiler', '2021', 80),
+       ('Birthday Present', '2022', 720);
 INSERT INTO companies_projects(project_id, company_id)
 VALUES (1, 1),
        (2, 1),
