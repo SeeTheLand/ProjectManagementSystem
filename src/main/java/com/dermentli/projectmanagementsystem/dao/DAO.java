@@ -1,12 +1,11 @@
 package com.dermentli.projectmanagementsystem.dao;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public interface DAO<T, ID> {
 
-    void add(T element) throws SQLException;
+    void add(T element);
 
     void remove(T element);
 
@@ -18,5 +17,5 @@ public interface DAO<T, ID> {
 
     void removeAll();
 
-    void addAll(List<T> elements) throws SQLException;
+    void addAll(List<T> elements);
 }

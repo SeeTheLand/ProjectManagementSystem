@@ -1,8 +1,11 @@
 package com.dermentli.projectmanagementsystem.dao;
 
+import com.dermentli.projectmanagementsystem.datasource.MyDataSourceFactory;
 import com.dermentli.projectmanagementsystem.domain.Developer;
+import com.dermentli.projectmanagementsystem.error.DaoException;
 import lombok.RequiredArgsConstructor;
 
+import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,8 +18,7 @@ import org.apache.logging.log4j.Logger;
 @RequiredArgsConstructor
 public class DeveloperDAOImpl implements DeveloperDAO {
     private static final Logger logger = LogManager.getLogger();
-    private final DataSource dataSource;
-
+    private final DataSource dataSource = MyDataSourceFactory.getMyPostrgresDataSource();
 
     @Override
     public void add(Developer developer) {
@@ -25,7 +27,7 @@ public class DeveloperDAOImpl implements DeveloperDAO {
             logger.debug("Adding {} to table", developer);
             statement.setString(1, developer.getName());
             statement.setInt(2, developer.getAge());
-            statement.setString(3, developer.getGender());
+            statement.setObject(3, developer.getGender());
             statement.setBigDecimal(4, developer.getSalary());
             statement.executeUpdate();
             logger.debug("Developer {} added to table {}", developer, TABLE_NAME);
@@ -67,10 +69,10 @@ public class DeveloperDAOImpl implements DeveloperDAO {
                 if (resultSet.next()) {
                     final String name = resultSet.getString("name");
                     final int age = resultSet.getInt("age");
-                    final String gender = resultSet.getString("gender");
+                    final Gender gender = Gender.ofName(resultSet.getString("gender"));
                     final BigDecimal salary = resultSet.getBigDecimal("salary");
                     logger.debug("Developer with id: {} returned", id);
-                    return Optional.of(new Developer(id, name, age, gender, salary));
+                    return Optional.of(new Developer(id, name, age, salary, gender));
                 } else {
                     logger.warn("Developer with id: {} doesn't exist", id);
                     return Optional.empty();
@@ -149,7 +151,7 @@ public class DeveloperDAOImpl implements DeveloperDAO {
     }
 
     public List<Developer> getDevelopersByLevel(String level) {
-        logger.debug("Trying to get developers by product language {}", level);
+        logger.debug("Trying to get developers by language level {}", level);
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(GET_LEVEL_DEVELOPERS)) {
             logger.debug("Trying to get developers with level {}", level);
@@ -169,9 +171,9 @@ public class DeveloperDAOImpl implements DeveloperDAO {
             final Long id = resultSet.getLong(1);
             final String name = resultSet.getString(2);
             final int age = resultSet.getInt(3);
-            final String gender = resultSet.getString(4);
+            final Gender gender = Gender.ofName(resultSet.getString(4));
             final BigDecimal salary = resultSet.getBigDecimal(5);
-            developers.add(new Developer(id, name, age, gender, salary));
+            developers.add(new Developer(id, name, age, salary, gender));
         }
         if (developers.size() > 0) {
             logger.debug("Return {} rows after get all queries for table {}", developers.size(), TABLE_NAME);

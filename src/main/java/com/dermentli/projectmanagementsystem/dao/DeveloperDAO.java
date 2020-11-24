@@ -16,5 +16,6 @@ public interface DeveloperDAO extends DAO<Developer, Long> {
     String FIND_ALL = "SELECT * FROM " + TABLE_NAME;
     String GET_DEVELOPERS_ON_PROJECT = "SELECT * FROM " + TABLE_NAME + " d INNER JOIN " + TABLE_DEV_PROJ + " dp on d.id = dp.developer_id INNER JOIN  " + TABLE_PROJECTS + " p on dp.project_id = p.id WHERE p.id = ?";
     String GET_LANGUAGE_DEVELOPERS = "SELECT * FROM " + TABLE_NAME + " d INNER JOIN " + TABLE_DEVELOPERS_SKILLS + " ds on d.id = ds.developer_id INNER JOIN " + TABLE_LANGUAGES + " l on ds.language_id = l.id WHERE l.name = cast(? as programing_language)";
-    String GET_LEVEL_DEVELOPERS = "SELECT * FROM " + TABLE_NAME + " d RIGHT JOIN " + TABLE_DEVELOPERS_SKILLS + " ds on d.id = ds.developer_id RIGHT JOIN " + TABLE_DEV_SKILLS + " s on ds.skill_id = s.id WHERE s.level = cast(? as level)";
+    String GET_LEVEL_DEVELOPERS = "SELECT * FROM " + TABLE_NAME + " d RIGHT JOIN " + TABLE_DEVELOPERS_SKILLS + " ds on d.id = ds.developer_id RIGHT JOIN "
+                                    + TABLE_DEV_SKILLS + " s on ds.skill_id = s.id WHERE s.level = cast(? as level)";
 }

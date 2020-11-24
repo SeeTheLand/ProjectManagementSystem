@@ -16,5 +16,5 @@ public class ProjectService {
         return projectDAOImpl.getDevSalariesOnProject(projectId);
     }
 
-    public List<Project> getProjectsInPreparedFormat() { return projectDAOImpl.getProjectsInPreparedFormat(); }
+    public void getProjectsInPreparedFormat() { projectDAOImpl.getProjectsInPreparedFormat(); }
 }

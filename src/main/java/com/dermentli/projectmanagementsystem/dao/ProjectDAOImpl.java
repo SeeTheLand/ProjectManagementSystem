@@ -1,29 +1,30 @@
 package com.dermentli.projectmanagementsystem.dao;
 
+import com.dermentli.projectmanagementsystem.datasource.MyDataSourceFactory;
 import com.dermentli.projectmanagementsystem.domain.Project;
+import com.dermentli.projectmanagementsystem.error.DaoException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 public class ProjectDAOImpl implements ProjectDAO {
     private static final Logger logger = LogManager.getLogger();
-    private final DataSource dataSource;
+    private final DataSource dataSource = MyDataSourceFactory.getMyPostrgresDataSource();
 
     @Override
-    public void add(Project project) throws SQLException {
+    public void add(Project project) {
         try(final Connection connection = dataSource.getConnection();
             final PreparedStatement statement = connection.prepareStatement(INSERT)) {
             logger.debug("Adding {} to table", project);
             statement.setString(1, project.getName());
             statement.setInt(2, project.getLatestReleaseDate());
-            statement.setInt(3, project.getCost());
+            statement.setBigDecimal(3, project.getCost());
             statement.executeUpdate();
             logger.debug("Developer {} added to table {}", project, TABLE_NAME);
         } catch (SQLException e) {
@@ -62,7 +63,7 @@ public class ProjectDAOImpl implements ProjectDAO {
                 if (res.next()) {
                     final String name = res.getString("name");
                     final int latest_release_date = res.getInt("latest_release_date");
-                    final int cost = res.getInt("cost");
+                    final BigDecimal cost = res.getBigDecimal("cost");
                     logger.debug("Developer with id: {} returned", id);
                     return Optional.of(new Project(id, name, latest_release_date, cost));
                 } else {
@@ -87,7 +88,7 @@ public class ProjectDAOImpl implements ProjectDAO {
                 final Long id = rs.getLong("id");
                 final String name = rs.getString("name");
                 final Integer latest_release_date = rs.getInt("latest_release_date");
-                final Integer cost = rs.getInt("cost");
+                final BigDecimal cost = rs.getBigDecimal("cost");
                 projects.add(new Project(id, name, latest_release_date, cost));
             }
 
@@ -117,7 +118,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     }
 
     @Override
-    public void addAll(List<Project> projects) throws SQLException {
+    public void addAll(List<Project> projects) {
         logger.debug("Trying to add elements {} to the table {}", projects, TABLE_NAME);
         for (Project project : projects) {
             add(project);
@@ -140,27 +141,28 @@ public class ProjectDAOImpl implements ProjectDAO {
         }
     }
 
-    public List<Project> getProjectsInPreparedFormat() {
+    public void getProjectsInPreparedFormat() {
         logger.debug("Trying to get all elements from table: {} with specific formating", TABLE_NAME);
         try (final Connection connection = dataSource.getConnection();
              final Statement stmt = connection.createStatement();
              final ResultSet rs = stmt.executeQuery(PROJECTS_WITH_EXTRA_FIELDS)) {
-            final List<Project> projects = new ArrayList<>();
+            final Map<Project, Integer> projects = new HashMap<>();
             while (rs.next()) {
                 final Long id = rs.getLong(1);
                 final String name = rs.getString(2);
                 final Integer latest_release_date = rs.getInt(3);
-                final Integer cost = rs.getInt(4);
+                final BigDecimal cost = rs.getBigDecimal(4);
                 final Integer count = rs.getInt(5);
-                projects.add(new Project(id, name, latest_release_date, cost, count));
+                projects.put(new Project(id, name, latest_release_date, cost), count);
             }
-
             if (projects.size() > 0) {
                 logger.debug("Return {} rows after get all queries for table {}", projects.size(), TABLE_NAME);
             } else {
                 logger.debug("Empty list after get all queries for table {}", TABLE_NAME);
             }
-            return projects;
+            for (Map.Entry<Project, Integer> entry : projects.entrySet()) {
+                System.out.println(entry.getKey() + " - " + entry.getValue());
+            }
         } catch (SQLException e) {
             logger.error("Error while executing findAll. Cause: " + e.getMessage());
             throw new DaoException("Error while executing findAll. Cause: " + e.getMessage());
